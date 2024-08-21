@@ -67,7 +67,7 @@ SECRET_KEY=xxxxx
 PRODUCTION_USERNAME=xxxxx
 PRODUCTION_PASSWORD=xxxx
 PRODUCTION_HOSTNAME=xxxx
-PRODUCTION_DATABASENAME=xxxx
+PRODUCTION_DATABASENAME='xxxx'
 ```
 1. `SECRET_KEY`: Flask app secret key
 
@@ -114,7 +114,7 @@ Now one last thing:
 In the `Web` section, press the `Reload` button to reload the server.
 
 And setup is done! 
-Enjoy rearranging code :)
+Enjoy playing with cards online :)
 
 ## Demo
-Click [here](http://sanvit.pythonanywhere.com/) and register to play the live demo!
+Click [here](http://badam7.pythonanywhere.com/) and register to play the live demo!

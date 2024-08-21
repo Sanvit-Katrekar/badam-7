@@ -6,3 +6,6 @@ __pycache__
 instance
 *.db
 original-cards
+players
+board
+hand-*
