@@ -1,0 +1,78 @@
+:root {
+    --total-board-cols: 7;
+    --card-width: 7rem;
+    --aspect-ratio: 1.4;
+    --card-height: calc(var(--card-width) * var(--aspect-ratio));
+}
+
+/* Media query for screens 576px and below (xs)*/
+@media (max-height: 575.98px) {
+  :root {
+    --card-width: 5rem;
+    --card-height: calc(var(--card-width) * var(--aspect-ratio));
+  }
+}
+
+.card-grid {
+    margin: 20px;
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: repeat(var(--total-board-cols), calc(var(--card-width) + 2rem));
+    z-index: 100;
+}
+
+.full-height {
+  height: 100vh; /* Full viewport height */
+}
+.top-div {
+  height: 70vh;
+}
+.bottom-div {
+  height: 30vh;
+}
+
+.empty-slot {
+  border: 2px solid rgba(255, 255, 255, .4);
+  border-radius: 5px;
+  width: var(--card-width);
+  height: var(--card-height);
+  position: relative;
+}
+.empty-slot:hover {
+  background-color: rgba(0, 146, 207, .65);
+}
+
+.empty-slot .selected, .small-hand .selected {
+  border: 2.5px solid #0092cf;
+  width: calc(var(--card-width) + 1rem);
+  height: calc((var(--card-width) + 1rem) * var(--aspect-ratio));
+  border-color: #0092cf;
+  border-style: solid;
+  z-index: 1;
+}
+
+.empty-slot .card:not(.card .card) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  background-size: cover;
+}
+
+.empty-slot .card {
+  top: 10px; 
+  left: 10px;
+}
+
+h3 {
+  text-align: center;
+}
+
+.btn {
+  width: 20rem;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+a {
+  padding: 50px;
+}

@@ -1,0 +1,70 @@
+<!-- Page for defining global CSS -->
+
+{% extends "bootstrap/base.html" %}
+
+{%block title%}Badam 7{%endblock%}
+
+{% block styles %}
+	{{ super() }}
+	
+	<style>
+		@import url('https://fonts.cdnfonts.com/css/comica');
+
+		h1{
+			text-align: center;
+		}
+		
+		body {
+			background-color: #2d2d2d;
+			color: white;
+		}
+
+		.gamebutton{
+			background-color: #0092cf;
+			color: white;
+			border: none;
+			padding: 8px 25px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			cursor: pointer;
+			border-radius: 12px;
+		}
+
+		.h-center {
+			display: block;
+			margin: auto;
+			text-align: center;
+			padding-bottom: 10px;
+		}
+	</style>
+{% endblock %}
+
+{%block content %}
+
+<div class="container" style="padding: 10px; padding-top: 20px;">
+
+    {% with messages = get_flashed_messages() %}
+	    {% if messages %}
+	    <div class="row">
+			{% for message in messages %}
+			<div class="col-12">
+				<div class="alert alert-warning" role="alert">
+						{{ message }}
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	    {% endif %}
+    {% endwith %}
+
+	{%block main_content%}{%endblock%}
+
+</div>
+
+{%endblock%}

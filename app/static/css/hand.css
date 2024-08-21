@@ -1,0 +1,77 @@
+:root {
+    --total-cols: 10;
+    --aspect-ratio: 1.4;
+    --card-width: 7rem;
+    --card-height: calc(var(--card-width) * var(--aspect-ratio));
+}
+
+.hand {
+    margin: 20px;
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: repeat(var(--total-cols), 22px);
+    transition: grid-template-columns 0.5s;
+  }
+  
+  .hand:hover {
+    grid-template-columns: repeat(var(--total-cols), 120px);
+  }
+
+  .small-hand {
+    margin:20px;
+    display: grid;
+    grid-gap: 0.5rem;
+    grid-template-columns: repeat(var(--total-cols), 22px);
+    transition: grid-template-columns 0.5s;
+  }
+  
+  .small-hand:hover {
+    grid-template-columns: repeat(var(--total-cols), 50px);
+  }
+  .small-hand-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    font-size: large;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+  }
+  
+  .slots-container {
+    display: flex;
+    justify-content: center;
+    font-size: large;
+  }
+
+  
+  .card {
+    box-shadow: 2px 2px 2px 2px #00000077;
+    border-radius: 5px;
+    background-color: #ffffff;
+    width: var(--card-width);
+    height: var(--card-height);
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    position: relative;
+    --bs-card-border-width: auto;
+  }
+
+  .card:hover {
+    width: var(--card-width);
+    height: var(--card-height);
+    border-color: #0092cf;
+    border-style: solid;
+    z-index: 1;
+  }
+  
+  .red {
+    color: red;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color:#598e3c;
+  }
