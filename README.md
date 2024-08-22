@@ -35,6 +35,14 @@ REDIS_HOST=xxxxx
 REDIS_PORT=xxxxx
 REDIS_PASSWORD=xxxxx
 ```
+
+Next, navigate to [`__init__.py`](app/__init__.py) and make the following comment changes to use the server's production configuration:
+
+```python
+#app.config.from_object('app.configuration.ProductionConfig')
+app.config.from_object('app.configuration.DevelopmentConfig')
+```
+
 Run the application by running the `run.py` file:
 
 ```bash
@@ -90,13 +98,6 @@ REDIS_PASSWORD=xxxxx
 7. `REDIS_PORT`: Redis database port
 
 8. `REDIS_PASSWORD`: Redis user password (Set under Configuration tab > Security > Password for Redis cloud)
-
-Next, navigate to [`__init__.py`](app/__init__.py) and make the following comment changes to use the server's production configuration:
-
-```python
-app.config.from_object('app.configuration.ProductionConfig')
-#app.config.from_object('app.configuration.DevelopmentConfig')
-```
 
 In the `Web` section, 
 

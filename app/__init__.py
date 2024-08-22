@@ -16,8 +16,8 @@ from flask_redis import FlaskRedis
 app = Flask(__name__, static_url_path='/static')
 
 #Configuration of application, see configuration.py, choose one and uncomment.
-#app.config.from_object('app.configuration.ProductionConfig')
-app.config.from_object('app.configuration.DevelopmentConfig')
+app.config.from_object('app.configuration.ProductionConfig')
+#app.config.from_object('app.configuration.DevelopmentConfig')
 
 cors = CORS(app, resources={r"/*":{"origins":"*"}})
 socketio = SocketIO(app, cors_allowed_origins="*")
