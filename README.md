@@ -31,6 +31,9 @@ Create a .env file and put in the following variables:
 PORT=xxxxx
 HOST=xxxxx
 SECRET_KEY=xxxxx
+REDIS_HOST=xxxxx
+REDIS_PORT=xxxxx
+REDIS_PASSWORD=xxxxx
 ```
 Run the application by running the `run.py` file:
 
@@ -68,6 +71,9 @@ PRODUCTION_USERNAME=xxxxx
 PRODUCTION_PASSWORD=xxxx
 PRODUCTION_HOSTNAME=xxxx
 PRODUCTION_DATABASENAME='xxxx'
+REDIS_HOST=xxxxx
+REDIS_PORT=xxxxx
+REDIS_PASSWORD=xxxxx
 ```
 1. `SECRET_KEY`: Flask app secret key
 
@@ -78,6 +84,12 @@ PRODUCTION_DATABASENAME='xxxx'
 4. `PRODUCTION_HOSTNAME`: The database host address you set from the 'Databases' tab
 
 5. `PRODUCTION_DATABASENAME`: The name of the database you set
+
+6. `REDIS_HOST`: Redis database hostname
+
+7. `REDIS_PORT`: Redis database port
+
+8. `REDIS_PASSWORD`: Redis user password (Set under Configuration tab > Security > Password for Redis cloud)
 
 Next, navigate to [`__init__.py`](app/__init__.py) and make the following comment changes to use the server's production configuration:
 
