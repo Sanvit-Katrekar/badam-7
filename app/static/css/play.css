@@ -13,6 +13,13 @@
   }
 }
 
+@media (min-width: 481px) and (max-width: 1080px) {
+  :root {
+    --card-width: 6rem;
+    --card-height: calc(var(--card-width) * var(--aspect-ratio));
+  }
+}
+
 .card-grid {
     margin: 20px;
     display: grid;
