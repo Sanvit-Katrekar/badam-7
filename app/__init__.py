@@ -9,7 +9,6 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_admin import Admin
-from flask_socketio import SocketIO
 from flask_cors import CORS
 
 app = Flask(__name__, static_url_path='/static')
@@ -19,7 +18,6 @@ app = Flask(__name__, static_url_path='/static')
 app.config.from_object('app.configuration.DevelopmentConfig')
 
 cors = CORS(app, resources={r"/*":{"origins":"*"}})
-socketio = SocketIO(app, cors_allowed_origins="*")
 
 bs = Bootstrap(app) #flask-bootstrap
 db = SQLAlchemy(app) #flask-sqlalchemy
