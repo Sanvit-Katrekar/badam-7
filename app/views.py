@@ -3,7 +3,7 @@
 from flask import request, url_for, redirect, render_template, flash, g, session, abort
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_socketio import emit, send
-from app import app, lm, db, socketio
+from app import app, lm, db, socketio, redis_db
 from app.constants import *
 from app.forms import *
 from app.models import *
@@ -298,13 +298,10 @@ def game_over():
 	}
 	write_obj("board", board)
 
-	# Reset players
-	if os.path.isfile("players"):
-		os.remove("players")
-
-	for file in os.listdir():
-		if file.startswith("hand-"):
-			os.remove(file)
+	# Delete players and their hands
+	redis_db.delete("players")
+	for key in redis_db.scan_iter("hand-*"):
+		redis_db.delete(key)
 	
 	socketio.emit('game-over')
 	return redirect(url_for('home'))

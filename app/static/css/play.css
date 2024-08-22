@@ -12,6 +12,13 @@
     --card-height: calc(var(--card-width) * var(--aspect-ratio));
   }
 }
+/* Media query for 9.7 inch Tabs */
+@media (min-width: 481px) and (max-width: 1080px) {
+  :root {
+    --card-width: 6rem;
+    --card-height: calc(var(--card-width) * var(--aspect-ratio));
+  }
+}
 
 .card-grid {
     margin: 20px;

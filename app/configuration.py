@@ -14,6 +14,12 @@ class Config(object):
 	CSRF_ENABLED = True
 	SQLALCHEMY_DATABASE_URI = 'sqlite:///application.db'
 	SQLALCHEMY_TRACK_MODIFICATIONS = True
+	REDIS_URL = "redis://:{password}@{host}:{port}/0"\
+		.format(
+			password=os.getenv('REDIS_PASSWORD'), # On cloud: Configuration > Security
+			host=os.getenv('REDIS_HOST'),
+			port=os.getenv('REDIS_PORT')
+	)
 
 class DevelopmentConfig(Config):
 	DEBUG = True
