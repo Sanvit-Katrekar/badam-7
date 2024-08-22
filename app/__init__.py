@@ -9,7 +9,6 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_admin import Admin
-from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_redis import FlaskRedis
 
@@ -20,7 +19,6 @@ app.config.from_object('app.configuration.ProductionConfig')
 #app.config.from_object('app.configuration.DevelopmentConfig')
 
 cors = CORS(app, resources={r"/*":{"origins":"*"}})
-socketio = SocketIO(app, cors_allowed_origins="*")
 
 bs = Bootstrap(app) #flask-bootstrap
 db = SQLAlchemy(app) #flask-sqlalchemy

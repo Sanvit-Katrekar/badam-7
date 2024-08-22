@@ -116,6 +116,7 @@ sortCardsInHandBtn.addEventListener("click", async (event) => {
 const doneBtn = document.getElementById('done-btn');
 doneBtn.addEventListener("click", async (event) => {
   await updateState();
+  window.location.reload();
 });
 
 const showStackBtn = document.getElementById('show-stack-btn');

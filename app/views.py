@@ -2,8 +2,7 @@
 
 from flask import request, url_for, redirect, render_template, flash, g, session, abort
 from flask_login import login_user, logout_user, current_user, login_required
-from flask_socketio import emit, send
-from app import app, lm, db, socketio, redis_db
+from app import app, lm, db, redis_db
 from app.constants import *
 from app.forms import *
 from app.models import *
@@ -83,7 +82,32 @@ def logout():
 @login_required
 def home():
 	if request.method == 'GET':
-		session['is_user_finished'] = False
+		if session.get('is_user_finished') is None:
+			session['is_user_finished'] = False
+			print(f"User: {session['_user_id']} connected")
+			player_list_obj: dict | None = load_obj('players')
+			if player_list_obj is None:
+				player_list = []
+				current_player_index = 0
+			else:
+				player_list = player_list_obj['player_list']
+				current_player_index = player_list_obj['current_player_index']
+			print("List is:", player_list)
+			player = User.query.filter_by(id=session['_user_id']).first()
+			print("Player requesting is:", player)
+			print("Player session is:", session['is_user_finished'])
+			if not session['is_user_finished'] and player not in player_list:
+				player_list.append(player)
+				player_list_obj = {
+					"player_list": player_list,
+					"current_player_index": current_player_index
+				}
+				write_obj('players', player_list_obj)
+				print("New list:", player_list)
+				return redirect(url_for('play'))
+			else:
+				print("Not added")
+				print("Old list:", player_list)
 		deck = Deck()
 		hands = [Hand() for _ in range(6)]
 		deck.distribute_cards(hands)
@@ -121,7 +145,6 @@ def player_finish():
 		"current_player_index": current_player_index
 	}
 	write_obj('players', players_obj)
-	socketio.emit('update-state')
 	return redirect(url_for('play'))
 
 @app.route('/update-state', methods=['POST'])
@@ -151,7 +174,6 @@ def update_status():
 	player_list_obj['current_player_index'] = (index + 1) % len(player_list_obj['player_list'])
 	write_obj('players', player_list_obj)
 	print("Updated state, broadcasting:")
-	socketio.emit('update-state')
 	return redirect(url_for('play'))
 
 @app.route('/play', methods=['GET', 'POST'])
@@ -232,7 +254,6 @@ def distribute_cards():
 		"display": display_status.value
 	}
 	write_obj("board", board)
-	socketio.emit('update-state')
 
 	return redirect(url_for('play'))
 
@@ -246,40 +267,6 @@ def sort_cards():
 	hand.sort()
 	write_obj("hand-"+session["_user_id"], hand)
 	return redirect(url_for('play'))
-
-@socketio.on('connect')
-def player_joined(event=None):
-	print(f"User: {session['_user_id']} connected")
-	print("Event is:", event)
-	player_list_obj: dict | None = load_obj('players')
-	if player_list_obj is None:
-		open('players', 'wb').close()
-		player_list = []
-		current_player_index = 0
-	else:
-		player_list = player_list_obj['player_list']
-		current_player_index = player_list_obj['current_player_index']
-	print("List is:", player_list)
-	player = User.query.filter_by(id=session['_user_id']).first()
-	print("Player requesting is:", player)
-	print("Player session is:", session['is_user_finished'])
-	if not session['is_user_finished'] and player not in player_list:
-		player_list.append(player)
-		player_list_obj = {
-			"player_list": player_list,
-			"current_player_index": current_player_index
-		}
-		write_obj('players', player_list_obj)
-		print("New list:", player_list)
-		socketio.emit('update-state')
-		return redirect(url_for('play'))
-	else:
-		print("Not added")
-		print("Old list:", player_list)
-
-@socketio.on('disconnect')
-def test_disconnect():
-	print(f"User {session['_user_id']} disconnected")
 
 @app.route('/game-over')
 @login_required
@@ -302,8 +289,6 @@ def game_over():
 	redis_db.delete("players")
 	for key in redis_db.scan_iter("hand-*"):
 		redis_db.delete(key)
-	
-	socketio.emit('game-over')
 	return redirect(url_for('home'))
 
 # ====================

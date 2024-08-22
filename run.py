@@ -1,5 +1,5 @@
 import os
-from app import app, db, socketio
+from app import app, db
 from dotenv import load_dotenv
 from app.constants import ENV_LOCATION
 from socket import gethostname
@@ -14,4 +14,4 @@ if __name__ == "__main__":
 		load_dotenv(ENV_LOCATION)
 		port = int(os.getenv("PORT"))
 		host = os.getenv("HOST")
-		socketio.run(app, host=host, port=port)
+		app.run(host=host, port=port)
