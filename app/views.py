@@ -84,32 +84,6 @@ def home():
 	if request.method == 'GET':
 		if session.get('is_user_finished') is None:
 			session['is_user_finished'] = False
-		print(f"User: {session['_user_id']} connected")
-		player_list_obj: dict | None = load_obj('players')
-		if player_list_obj is None:
-			open('players', 'wb').close()
-			player_list = []
-			current_player_index = 0
-		else:
-			player_list = player_list_obj['player_list']
-			current_player_index = player_list_obj['current_player_index']
-		print("List is:", player_list)
-		player = User.query.filter_by(id=session['_user_id']).first()
-		print("Player requesting is:", player)
-		print("Player session is:", session['is_user_finished'])
-		if not session['is_user_finished'] and player not in player_list:
-			player_list.append(player)
-			player_list_obj = {
-				"player_list": player_list,
-				"current_player_index": current_player_index
-			}
-			write_obj('players', player_list_obj)
-			print("New list:", player_list)
-			return redirect(url_for('play'))
-		else:
-			print("Not added")
-			print("Old list:", player_list)
-
 		deck = Deck()
 		hands = [Hand() for _ in range(6)]
 		deck.distribute_cards(hands)
@@ -182,6 +156,39 @@ def update_status():
 @login_required
 def play():
 	if request.method == 'GET':
+		print(f"User: {session['_user_id']} connected")
+		player_list_obj: dict | None = load_obj('players')
+		if player_list_obj is None:
+			open('players', 'wb').close()
+			player_list = []
+			current_player_index = 0
+			write_obj('is_game_over', False)
+		else:
+			player_list = player_list_obj['player_list']
+			current_player_index = player_list_obj['current_player_index']
+		print("List is:", player_list)
+		player = User.query.filter_by(id=session['_user_id']).first()
+		print("Player requesting is:", player)
+		print("Player session is:", session['is_user_finished'])
+		print("is_game_over:", load_obj('is_game_over'))
+		if not session['is_user_finished'] and player not in player_list and not load_obj('is_game_over'):
+			player_list.append(player)
+			player_list_obj = {
+				"player_list": player_list,
+				"current_player_index": current_player_index
+			}
+			write_obj('players', player_list_obj)
+			print("New list:", player_list)
+			return redirect(url_for('play'))
+		else:
+			print("Not added")
+			print("Old list:", player_list)
+			print("Is over:", load_obj('is_game_over'))
+			if not player_list:
+				return redirect(url_for('game_over'))
+
+		if load_obj('is_game_over'):
+			return redirect(url_for('game_over'))
 		print("Displaying players:")
 		print(load_obj('players'))
 		player_hand = load_obj('hand-'+session['_user_id'])
@@ -275,6 +282,7 @@ def sort_cards():
 def game_over():
 	# Reset finish status
 	session['is_user_finished'] = False
+	write_obj('is_game_over', True)
 
 	# Reset board
 	deck = Deck()

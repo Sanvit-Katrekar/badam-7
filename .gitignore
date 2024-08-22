@@ -9,3 +9,4 @@ original-cards
 players
 board
 hand-*
+is_game_over
