@@ -64,11 +64,6 @@
 				</div>
 			</div>
 			<div class="col-md-2 col-sm-12">
-				<h3> Card Actions </h3>
-				<button type="button" class="btn btn-primary" id="flip-card-btn">Flip selected card</button>
-				<button type="button" class="btn btn-primary" id="flip-cards-in-hand-btn">Flip all cards in hand</button>
-				<button type="button" class="btn btn-primary" id="put-card-in-hand-btn">Take all cards in hand</button>
-				<button type="submit" class="btn btn-primary" id="sort-cards-in-hand-btn">Sort cards in hand</button>
 				<h3> Turn Actions </h3>
 				{% if not is_user_finished %}
 					<button class="btn btn-success" id="done-btn">Done</button>
@@ -79,6 +74,11 @@
 				{% else %}
 					<button class="btn btn-danger">Actions Disabled</button>
 				{% endif %}
+				<h3> Card Actions </h3>
+				<button type="button" class="btn btn-primary" id="flip-card-btn">Flip selected card</button>
+				<button type="button" class="btn btn-primary" id="flip-cards-in-hand-btn">Flip all cards in hand</button>
+				<button type="button" class="btn btn-primary" id="put-card-in-hand-btn">Take all cards in hand</button>
+				<button type="submit" class="btn btn-primary" id="sort-cards-in-hand-btn">Sort cards in hand</button>
 			</div>
 		</div>
 	</div>
