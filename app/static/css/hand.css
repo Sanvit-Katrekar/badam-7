@@ -3,6 +3,22 @@
     --aspect-ratio: 1.4;
     --card-width: 7rem;
     --card-height: calc(var(--card-width) * var(--aspect-ratio));
+    --small-hand-rest-spacing: 22px;
+    --small-hand-hover-spacing: 50px;
+}
+
+@media (max-width: 480.98px) {
+  :root {
+    --small-hand-rest-spacing: 0.5rem;
+    --small-hand-hover-spacing: 1.5rem;
+  }
+  .small-hand-container {
+    width: 85vw;
+    margin-left: 2rem;
+  }
+  #card-actions-header {
+    margin-top: 5px;
+  }
 }
 
 .hand {
@@ -18,20 +34,20 @@
   }
 
   .small-hand {
-    margin:20px;
+    margin: 0.5rem;
     display: grid;
     grid-gap: 0.5rem;
-    grid-template-columns: repeat(var(--total-cols), 22px);
+    grid-template-columns: repeat(var(--total-cols), var(--small-hand-rest-spacing));
     transition: grid-template-columns 0.5s;
   }
   
   .small-hand:hover {
-    grid-template-columns: repeat(var(--total-cols), 50px);
+    grid-template-columns: repeat(var(--total-cols), var(--small-hand-hover-spacing));
   }
   .small-hand-container {
+    min-height: calc(var(--card-height) + 1.5rem);
     display: flex;
     justify-content: center;
-    padding: 20px;
     font-size: large;
     border: 2px solid rgba(255, 255, 255, 0.7);
   }

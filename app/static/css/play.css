@@ -3,9 +3,32 @@
     --card-width: 7rem;
     --aspect-ratio: 1.4;
     --card-height: calc(var(--card-width) * var(--aspect-ratio));
+    --btn-width: 20rem;
+    --col-spacing: 2rem;
 }
 
-/* Media query for screens 576px and below (xs)*/
+@media (max-width: 480.98px) {
+  :root {
+    --card-width: 3.5rem;
+    --card-height: calc(var(--card-width) * var(--aspect-ratio));
+    --btn-width: 15.5rem;
+    --col-spacing: 1rem;
+  }
+  h3 {
+      font-size: 1.5rem;
+  }
+  #cardgrid {
+    margin-left: 0.5rem !important;
+    grid-gap: 0.4rem;
+  }
+  .btn {
+    width: var(--btn-width);
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 10px;
+  }
+}
+
 @media (max-height: 575.98px) {
   :root {
     --card-width: 5rem;
@@ -24,7 +47,7 @@
     margin: 20px;
     display: grid;
     grid-gap: 0.5rem;
-    grid-template-columns: repeat(var(--total-board-cols), calc(var(--card-width) + 2rem));
+    grid-template-columns: repeat(var(--total-board-cols), calc(var(--card-width) + var(--col-spacing)));
     z-index: 100;
 }
 
@@ -76,7 +99,7 @@ h3 {
 }
 
 .btn {
-  width: 20rem;
+  width: var(--btn-width);
   padding: 10px;
   margin-bottom: 10px;
 }
