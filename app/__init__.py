@@ -11,6 +11,7 @@ from flask_login import LoginManager
 from flask_admin import Admin
 from flask_socketio import SocketIO
 from flask_cors import CORS
+from flask_redis import FlaskRedis
 from app.constants import Mode, CONFIGURATION_MODE
 
 app = Flask(__name__, static_url_path='/static')
@@ -34,6 +35,8 @@ socketio = SocketIO(
 
 bs = Bootstrap(app) #flask-bootstrap
 db = SQLAlchemy(app) #flask-sqlalchemy
+
+redis_db = FlaskRedis(app)
 
 admin = Admin(app)
 

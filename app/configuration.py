@@ -36,3 +36,9 @@ class ProductionConfig(Config):
 		'pool_pre_ping': SQLALCHEMY_POOL_PRE_PING
 	}
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
+	REDIS_URL = "redis://:{password}@{host}:{port}/0"\
+	.format(
+		password=os.getenv('REDIS_PASSWORD'), # On cloud: Configuration > Security
+		host=os.getenv('REDIS_HOST'),
+		port=os.getenv('REDIS_PORT')
+	)
