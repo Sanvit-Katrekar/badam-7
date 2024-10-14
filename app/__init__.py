@@ -11,15 +11,18 @@ from flask_login import LoginManager
 from flask_admin import Admin
 from flask_socketio import SocketIO
 from flask_cors import CORS
+from app.constants import Mode, CONFIGURATION_MODE
 
 app = Flask(__name__, static_url_path='/static')
 
 #Configuration of application, see configuration.py, choose one and uncomment.
-#app.config.from_object('app.configuration.ProductionConfig')
-app.config.from_object('app.configuration.DevelopmentConfig')
+if CONFIGURATION_MODE == Mode.PRODUCTION:
+    app.config.from_object('app.configuration.ProductionConfig')
+elif CONFIGURATION_MODE == Mode.DEVELOPMENT:
+    app.config.from_object('app.configuration.DevelopmentConfig')
 
 cors = CORS(app, resources={r"/*":{"origins":"*"}})
-socketio = SocketIO(app, cors_allowed_origins=["*"])
+socketio = SocketIO(app, cors_allowed_origins=["http://127.0.0.1:5001", "*"])
 
 bs = Bootstrap(app) #flask-bootstrap
 db = SQLAlchemy(app) #flask-sqlalchemy
