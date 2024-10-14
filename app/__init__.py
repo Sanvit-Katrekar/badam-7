@@ -27,6 +27,7 @@ socketio = SocketIO(
     cors_allowed_origins=[
         "http://127.0.0.1:5001",
         "https://badam7.up.railway.app",
+        "https://badam-7.onrender.com",
         "*"
     ]
 )
