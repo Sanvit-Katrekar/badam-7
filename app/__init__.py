@@ -22,7 +22,14 @@ elif CONFIGURATION_MODE == Mode.DEVELOPMENT:
     app.config.from_object('app.configuration.DevelopmentConfig')
 
 cors = CORS(app, resources={r"/*":{"origins":"*"}})
-socketio = SocketIO(app, cors_allowed_origins=["http://127.0.0.1:5001", "*"])
+socketio = SocketIO(
+    app,
+    cors_allowed_origins=[
+        "http://127.0.0.1:5001",
+        "https://badam7.up.railway.app",
+        "*"
+    ]
+)
 
 bs = Bootstrap(app) #flask-bootstrap
 db = SQLAlchemy(app) #flask-sqlalchemy
