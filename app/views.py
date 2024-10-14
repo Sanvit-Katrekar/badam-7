@@ -2,7 +2,8 @@
 
 from flask import request, url_for, redirect, render_template, flash, g, session, abort
 from flask_login import login_user, logout_user, current_user, login_required
-from app import app, lm, db
+from flask_socketio import emit, send
+from app import app, lm, db, socketio
 from app.constants import *
 from app.forms import *
 from app.models import *
@@ -106,9 +107,13 @@ def player_finish():
 	session['is_user_finished'] = True
 	players_obj = load_obj('players')
 	player_list: list = players_obj['player_list']
+
 	current_player_index = players_obj['current_player_index']
+
 	if session['_user_id'] == player_list[current_player_index].id:
 		current_player_index = (current_player_index + 1) % (len(player_list) - 1)
+	app.logger.warning("Current player index: " + str(current_player_index))
+	app.logger.info(players_obj['player_list'][current_player_index])
 	for i, player in enumerate(player_list):
 		print(repr(player.id), repr(session['_user_id']))
 		if str(player.id) == session['_user_id']:
@@ -121,6 +126,7 @@ def player_finish():
 		"current_player_index": current_player_index
 	}
 	write_obj('players', players_obj)
+	socketio.emit('update-state')
 	return redirect(url_for('play'))
 
 @app.route('/update-state', methods=['POST'])
@@ -150,45 +156,14 @@ def update_status():
 	player_list_obj['current_player_index'] = (index + 1) % len(player_list_obj['player_list'])
 	write_obj('players', player_list_obj)
 	print("Updated state, broadcasting:")
+	socketio.emit('update-state')
 	return redirect(url_for('play'))
+
 
 @app.route('/play', methods=['GET', 'POST'])
 @login_required
 def play():
 	if request.method == 'GET':
-		print(f"User: {session['_user_id']} connected")
-		player_list_obj: dict | None = load_obj('players')
-		if player_list_obj is None:
-			open('players', 'wb').close()
-			player_list = []
-			current_player_index = 0
-			write_obj('is_game_over', False)
-		else:
-			player_list = player_list_obj['player_list']
-			current_player_index = player_list_obj['current_player_index']
-		print("List is:", player_list)
-		player = User.query.filter_by(id=session['_user_id']).first()
-		print("Player requesting is:", player)
-		print("Player session is:", session['is_user_finished'])
-		print("is_game_over:", load_obj('is_game_over'))
-		if not session['is_user_finished'] and player not in player_list and not load_obj('is_game_over'):
-			player_list.append(player)
-			player_list_obj = {
-				"player_list": player_list,
-				"current_player_index": current_player_index
-			}
-			write_obj('players', player_list_obj)
-			print("New list:", player_list)
-			return redirect(url_for('play'))
-		else:
-			print("Not added")
-			print("Old list:", player_list)
-			print("Is over:", load_obj('is_game_over'))
-			if not player_list:
-				return redirect(url_for('game_over'))
-
-		if load_obj('is_game_over'):
-			return redirect(url_for('game_over'))
 		print("Displaying players:")
 		print(load_obj('players'))
 		player_hand = load_obj('hand-'+session['_user_id'])
@@ -220,6 +195,7 @@ def return_chance():
 	current_player_index = (current_player_index - 1) % n_players
 	players_obj['current_player_index'] = current_player_index
 	write_obj('players', players_obj)
+	socketio.emit('update-state')
 	return redirect(url_for('play'))
 
 @app.route('/show-stack', methods=['POST'])
@@ -263,8 +239,44 @@ def distribute_cards():
 		"display": display_status.value
 	}
 	write_obj("board", board)
+	socketio.emit('update-state')
 
 	return redirect(url_for('play'))
+
+@socketio.on('connect')
+def player_joined(event=None):
+	print(f"User: {session['_user_id']} connected")
+	print("Event is:", event)
+	player_list_obj: dict | None = load_obj('players')
+	if player_list_obj is None:
+		open('players', 'wb').close()
+		player_list = []
+		current_player_index = 0
+	else:
+		player_list = player_list_obj['player_list']
+		current_player_index = player_list_obj['current_player_index']
+	print("List is:", player_list)
+	player = User.query.filter_by(id=session['_user_id']).first()
+	print("Player requesting is:", player)
+	print("Player session is:", session['is_user_finished'])
+	if not session['is_user_finished'] and player not in player_list:
+		player_list.append(player)
+		player_list_obj = {
+			"player_list": player_list,
+			"current_player_index": current_player_index
+		}
+		write_obj('players', player_list_obj)
+		print("New list:", player_list)
+		socketio.emit('update-state')
+		return redirect(url_for('play'))
+	else:
+		print("Not added")
+		print("Old list:", player_list)
+
+@socketio.on('disconnect')
+def test_disconnect():
+	print(f"User {session['_user_id']} disconnected")
+
 
 @app.route('/sort-cards', methods=['POST'])
 @login_required
@@ -281,8 +293,9 @@ def sort_cards():
 @login_required
 def game_over():
 	# Reset finish status
+
+	print("Game is over!")
 	session['is_user_finished'] = False
-	write_obj('is_game_over', True)
 
 	# Reset board
 	deck = Deck()
@@ -302,6 +315,22 @@ def game_over():
 	for file in os.listdir():
 		if file.startswith("hand-"):
 			os.remove(file)
+	socketio.emit('game-over')
 	return redirect(url_for('home'))
+
+@app.route('/set-game-over')
+@login_required
+def set_game_over():
+	print("Set the game to over!")
+	session['is_user_finished'] = False
+	return redirect(url_for('home'))
+
+@app.route('/check')
+@login_required
+def check():
+	print(load_obj('player_list'))
+	return {"hello": load_obj('player_list')}
+
+
 
 # ====================

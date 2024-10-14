@@ -20,7 +20,7 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
 	''' Configuration for deploying to pythonanywhere '''
-	SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}"\
+	SQLALCHEMY_DATABASE_URI = "mysql+pymysqlconnector://{username}:{password}@{hostname}/{databasename}"\
 		.format(
 			username=os.getenv('PRODUCTION_USERNAME'), # The username from the 'Databases' tab
 			password=os.getenv('PRODUCTION_PASSWORD'), # The password you set on the 'Databases' tab,

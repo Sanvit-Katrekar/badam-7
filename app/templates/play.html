@@ -102,6 +102,23 @@
 	<script type="text/javascript" src="static/js/init.js"></script>
 	<script type="text/javascript" src="static/js/cardActions.js"></script>
 	<script type="text/javascript" src="static/js/buttonFunctions.js"></script>
+	<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        // Connect to the Socket.IO server
+        const socket = io();
+		socket.on('connect', () => {
+			console.log('Connected to the server');
+		});
+		socket.on('update-state', (event) => {
+			window.location.reload();
+		});
+		socket.on('update-state', (event) => {
+			window.location.reload();
+		});
+		socket.on('game-over', (event) => {
+			window.location.href = '/set-game-over';
+		})
+    </script>
 </body>
 
 {% endblock %}
