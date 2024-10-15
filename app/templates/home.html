@@ -4,22 +4,34 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="static/css/home.css">
     <link rel="stylesheet" href="static/css/hand.css">
+    <style>
+        @media (max-width: 1080px) {
+            #main-div {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%) scale(1.75);
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-
-<h1> Game Rules</h1>
 <body>
-            <p style="text-align: center;">So, here's a bunch of playing cards from a deck.. </p>
-            {% for hand in hands %}
-            <div style="display: flex; justify-content: center; padding: 30px; font-size: large;" width="100%">
-                <div class="hand">
-                    {% for card in hand.cards %}
-                        <div class="card" style="background-image: url({{card.image_path}}); background-size: cover;">
-                        </div>
-                    {% endfor %}
-                </div>
+    <div id="main-div">
+        <h1> Game Rules</h1>
+        <p style="text-align: center;">So, here's a bunch of playing cards from a deck.. </p>
+        {% for hand in hands %}
+        <div style="display: flex; justify-content: center; padding: 30px; font-size: large;" width="100%">
+            <div class="hand">
+                {% for card in hand.cards %}
+                    <div class="card" style="background-image: url({{card.image_path}}); background-size: cover;">
+                    </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-            <p style="text-align: center;">Do whatever you want with them!</p>
+        </div>
+        {% endfor %}
+        <p style="text-align: center;">Do whatever you want with them!</p>
         <form action="" method="post">
             <button name="play" value="play" type="submit" class="btn btn-success box">Start Game</button>
         </form>
