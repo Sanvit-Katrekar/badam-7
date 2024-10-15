@@ -42,3 +42,5 @@ class ProductionConfig(Config):
 		host=os.getenv('REDIS_HOST'),
 		port=os.getenv('REDIS_PORT')
 	)
+	SESSION_COOKIE_SAMESITE = 'None'
+	SESSION_COOKIE_SECURE = True
