@@ -22,15 +22,20 @@ if CONFIGURATION_MODE == Mode.PRODUCTION:
 elif CONFIGURATION_MODE == Mode.DEVELOPMENT:
     app.config.from_object('app.configuration.DevelopmentConfig')
 
-cors = CORS(app, resources={r"/*":{"origins":"*"}})
+
+ALLOW_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:5001",
+    "https://badam7.up.railway.app",
+    "https://badam-7.onrender.com"
+]
+cors = CORS(app, resources={
+    r"/*": {
+        "origins": ALLOW_TRUSTED_ORIGINS
+    }
+})
 socketio = SocketIO(
     app,
-    cors_allowed_origins=[
-        "http://127.0.0.1:5001",
-        "https://badam7.up.railway.app",
-        "https://badam-7.onrender.com",
-        "*"
-    ]
+    cors_allowed_origins=ALLOW_TRUSTED_ORIGINS
 )
 
 bs = Bootstrap(app) #flask-bootstrap
