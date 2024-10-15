@@ -35,7 +35,8 @@ cors = CORS(app, resources={
 })
 socketio = SocketIO(
     app,
-    cors_allowed_origins=ALLOW_TRUSTED_ORIGINS
+    cors_allowed_origins=ALLOW_TRUSTED_ORIGINS,
+    async_mode='eventlet'
 )
 
 bs = Bootstrap(app) #flask-bootstrap
