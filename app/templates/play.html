@@ -106,7 +106,6 @@
     <script>
         // Connect to the Socket.IO server
         const socket = io({
-			withCredentials: true,
 			transports: ["websocket"]
 		});
 		socket.on('connect', () => {
