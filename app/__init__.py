@@ -57,6 +57,8 @@ from app.models import User
 
 admin.add_view(AuthModelView(User, db.session))
 
+from app import views, models
+
 from app.utils import time_in_words
 
 app.jinja_env.globals.update(time_in_words=time_in_words)
