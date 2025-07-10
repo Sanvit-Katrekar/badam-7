@@ -63,7 +63,7 @@ def register():
 		if user:
 			flash('Username already taken!')
 			return render_template('register.html', title='Register', form=form)	
-		user = User(username=form.username.data)
+		user = User(username=form.username.data.lower())
 		user.set_password(form.password.data)
 		db.session.add(user)
 		db.session.commit()
