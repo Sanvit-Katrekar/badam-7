@@ -24,10 +24,13 @@ elif CONFIGURATION_MODE == Mode.DEVELOPMENT:
 
 
 ALLOW_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:5001",
+    "http://127.0.0.1:8000",
     "https://badam7.up.railway.app",
-    "https://badam-7.onrender.com"
+    "https://badam-7.onrender.com",
+    "http://badam7.soon.it",
+    "https://badam7.soon.it",
 ]
+
 cors = CORS(app, resources={
     r"/*": {
         "origins": ALLOW_TRUSTED_ORIGINS
