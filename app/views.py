@@ -8,10 +8,10 @@ from app.constants import *
 from app.forms import *
 from app.models import *
 from app.utils import *
-#from app.puzzle import Puzzle
+from threading import Thread
+import time
 from .cards.cards_logic import *
 from .cards.utils import *
-import os
 
 @app.route('/')
 def index():
@@ -100,13 +100,18 @@ def home():
 		session['game_id'] = 1
 		return redirect(url_for('play'))
 
+def emit_update_state():
+	UPDATE_STATE_TIMEOUT = 0.5
+	time.sleep(UPDATE_STATE_TIMEOUT)
+	socketio.emit('update-state')
+
 @app.route('/player-finish')
 @login_required
 def player_finish():
 	print("Player finis")
-	session['is_user_finished'] = True
 	players_obj = load_obj('players')
 	player_list: list = players_obj['player_list']
+	print("Current player list is:", player_list)
 
 	current_player_index = players_obj['current_player_index']
 
@@ -121,13 +126,15 @@ def player_finish():
 			break
 	if not player_list:
 		return redirect(url_for('game_over'))
+	print("New player list is:", player_list)
 	players_obj = {
 		"player_list": player_list,
 		"current_player_index": current_player_index
 	}
 	write_obj('players', players_obj)
-	socketio.emit('update-state')
-	return redirect(url_for('play'))
+	Thread(target=emit_update_state).start()  # run async
+	session['is_user_finished'] = True
+	return redirect(url_for('play', is_user_finished=True))
 
 @app.route('/update-state', methods=['POST'])
 @login_required
