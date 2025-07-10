@@ -164,11 +164,19 @@ def update_status():
 @login_required
 def play():
 	if request.method == 'GET':
-		print("Displaying players:")
-		print(load_obj('players'))
+		players_obj = load_obj('players')
 		player_hand = load_obj('hand-'+session['_user_id'])
 
+		print("Displaying players:")
+		print(players_obj)
+
+		for player in players_obj['player_list']:
+			if str(player.id) == session['_user_id']:
+				player.username += " (You)"
+
+
 		board_obj = load_obj('board')
+		board = None
 		if board_obj is None:
 			deck = Deck()
 			matrix = [None for _ in range(EMPTY_SLOTS)]
@@ -178,11 +186,14 @@ def play():
 				"display": DEFAULT_CARD_STACK_DISPLAY.value
 			}
 			write_obj("board", board)
+
+		board = board or board_obj
+
 		return render_template(
 			'play.html',
 			hand=player_hand,
-			board=load_obj('board'),
-			players=load_obj('players'),
+			board=board,
+			players=players_obj,
 			is_user_finished=session['is_user_finished']
 		)
 
