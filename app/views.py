@@ -170,9 +170,10 @@ def play():
 		print("Displaying players:")
 		print(players_obj)
 
-		for player in players_obj['player_list']:
-			if str(player.id) == session['_user_id']:
-				player.username += " (You)"
+		if players_obj:
+			for player in players_obj['player_list']:
+				if str(player.id) == session['_user_id']:
+					player.username += " (You)"
 
 
 		board_obj = load_obj('board')
