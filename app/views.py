@@ -177,12 +177,6 @@ def play():
 		print("Displaying players:")
 		print(players_obj)
 
-		if players_obj:
-			for player in players_obj['player_list']:
-				if str(player.id) == session['_user_id']:
-					player.username += " (You)"
-
-
 		board_obj = load_obj('board')
 		board = None
 		if board_obj is None:
@@ -202,6 +196,7 @@ def play():
 			hand=player_hand,
 			board=board,
 			players=players_obj,
+			user_id=int(session['_user_id']),
 			is_user_finished=session['is_user_finished']
 		)
 

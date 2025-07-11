@@ -16,15 +16,25 @@
 
 <body>
 	<div class="container-fluid flex-column slots-container" width="100%">
-		<div class="row" style="margin-left: 0px !important">
+		<div class="row" style="margin-left: -2px !important;">
 			<div class="col-md-2 col-sm-3" style="padding: 0px !important; padding-top: 2rem !important;">
 				<h3 style="background-color: #3B2C3B; display: inline; padding: 1rem 2rem; margin-top: 1rem;">Players</h3>
 				<ol style="padding-top: 2rem;">
 					{%for player in players.player_list %}
 						{% if loop.index0 == players.current_player_index %}
-							<li style="color: #ffc107;">{{player.username}}</li>
+							{% if player.id == user_id %}
+							<div class="d-flex">
+								<li class="current-player-highlight">{{player.username.upper()}} (YOU)</li>
+							</div>
+							{% else %}
+								<li class="current-player-highlight">{{player.username.upper()}}</li>
+							{% endif %}
 						{% else %}
-							<li>{{player.username}}</li>
+							{% if player.id == user_id %}
+								<li>{{player.username.upper()}} (YOU)</li>
+							{% else %}
+								<li>{{player.username.upper()}}</li>
+							{% endif %}
 						{% endif %}
 					{% endfor %}
 				</ol>
