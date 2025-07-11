@@ -109,7 +109,7 @@ async function updateState() {
 // Add listeners to buttons
 const sortCardsInHandBtn = document.getElementById('sort-cards-in-hand-btn');
 sortCardsInHandBtn.addEventListener("click", async (event) => {
-  await sortCardsInHandBtn();
+  await sortCardsInHand();
   window.location.reload();
 });
 
