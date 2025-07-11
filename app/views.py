@@ -74,6 +74,7 @@ def register():
 @app.route('/logout/')
 @login_required
 def logout():
+	print("Got logout request")
 	logout_user()
 	return redirect(url_for('index'))
 
@@ -100,9 +101,8 @@ def home():
 		session['game_id'] = 1
 		return redirect(url_for('play'))
 
-def emit_update_state():
-	UPDATE_STATE_TIMEOUT = 0.5
-	time.sleep(UPDATE_STATE_TIMEOUT)
+def emit_update_state(update_state_timeout=DEFAULT_UPDATE_STATE_TIMEOUT):
+	time.sleep(update_state_timeout)
 	socketio.emit('update-state')
 
 @app.route('/player-finish')
@@ -110,6 +110,10 @@ def emit_update_state():
 def player_finish():
 	print("Player finis")
 	players_obj = load_obj('players')
+
+	if not (players_obj and players_obj.get("player_list")):
+		return redirect(url_for('game_over'))
+	
 	player_list: list = players_obj['player_list']
 	print("Current player list is:", player_list)
 
@@ -132,9 +136,18 @@ def player_finish():
 		"current_player_index": current_player_index
 	}
 	write_obj('players', players_obj)
-	Thread(target=emit_update_state).start()  # run async
 	session['is_user_finished'] = True
-	return redirect(url_for('play', is_user_finished=True))
+	
+	logout = request.args.get('logout')
+	print("Logout", repr(logout), repr('true'))
+	state_update_thread = Thread(target=emit_update_state, args=(2,))
+	if logout == "true":
+		print("Attempt to logout:")
+		state_update_thread.start()
+		return redirect(url_for('logout'))
+	
+	state_update_thread.start()
+	return redirect(url_for('play'))
 
 @app.route('/update-state', methods=['POST'])
 @login_required

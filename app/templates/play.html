@@ -38,6 +38,13 @@
 						{% endif %}
 					{% endfor %}
 				</ol>
+				<button
+					id="exit-game-btn"
+					class="btn"
+					onclick="window.location.href='/player-finish?logout=true';"
+				>
+					Exit game
+				</button>
 			</div>
 
 			<div class="col-md-8 h-center" style="padding: 0px !important;">
@@ -52,7 +59,6 @@
 							border: 0px solid;
 						}
 					</style>
-					<script> console.log("Gotem"); </script>
 				{% endif %}
 				<div class="card-grid" id="cardgrid">
 					{% for slot in board.matrix %}
